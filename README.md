@@ -1,8 +1,23 @@
-# aws_sam_ocr
-This is an AWS SAM app that uses Rekognition APIs to detect text in S3 Objects and stores labels in DynamoDB.
+# ECE 590.24 Data Analysis At Scale in Cloud
+
+Previous projects:
+
+[NEWS api on Google Cloud Platform](https://github.com/JiajunSong629/NEWS_API_on_Google_Cloud_Platform)
+
+[Jupyter workflows using Docker Container](https://github.com/JiajunSong629/jupyter-workflows-using-docker-container)
+
+[Spark jobs workflows on AWS EMR](https://github.com/JiajunSong629/AWS_EMR_Spark_Workflow)
+
+## Serverless Data Engineering Pipeline
+
+This is individual project 3 for my course, [Data Analysis At Scale in Cloud](https://noahgift.github.io/cloud-data-analysis-at-scale/).
+In this project, I build an OCR application on AWS Lambda with Rekognition APIs to detect text in S3 Objects and stores labels in DynamoDB.
+More features about the application are in the [screencast here](https://youtu.be/LbjLZYp2iME).
 
 ## Project structure
-Here is a brief overview of what we have generated for you.
+
+Here is a brief overview of the repo.
+
 ```bash
 .
 ├── README.md                   <-- This instructions file
@@ -14,42 +29,46 @@ Here is a brief overview of what we have generated for you.
 ```
 
 
-## Requirements
+### Requirements
 * AWS CLI
 * [Python 3.6 installed](https://www.python.org/downloads/)
 * [Docker installed](https://www.docker.com/community-edition)
-* [Python Virtual Environment](http://docs.python-guide.org/en/latest/dev/virtualenvs/)
 
+All of them are preinstalled on AWS Cloud9 and we will use it for demo.
 
-## CLI Commands to package and deploy your application
-CLI commands to package, deploy and describe outputs defined within the cloudformation stack.
-
-First, we need an `S3 bucket` where we can upload our Lambda functions packaged as ZIP before we deploy anything - If you don't have a S3 bucket to store code artifacts then this is a good time to create one:
+### How to build (on Cloud9 environment)
 
 ```bash
-aws s3 mb s3://BUCKET_NAME
+python3 -m venv ~/.ocrlambda
+pip3 install pip setuptools wheel pyyaml -U
+pip install boto3 botocore awscli aws-sam-cli -U
+sam init --location gh:aws-samples/cookiecutter-aws-sam-s3-rekognition-dynamodb-python
 ```
 
-Next, run the following command to package your Lambda function. The `sam package` command creates a deployment package (ZIP file) containing your code and dependencies, and uploads them to the S3 bucket you specify. 
+After a few configurations the project structure is ready.
+
+Next, run the following command to create a S3 bucket, package the Lambda function and upload it to the bucket.
 
 ```bash
+touch requirements.txt
+sam build --use-container
+aws s3 mb s3://your-bucket-name
 sam package \
     --template-file template.yaml \
     --output-template-file packaged.yaml \
-    --s3-bucket REPLACE_THIS_WITH_YOUR_S3_BUCKET_NAME
+    --s3-bucket your-bucket-name
 ```
 
-The `sam deploy` command will create a Cloudformation Stack and deploy your SAM resources.
+The sam deploy command will create a Cloudformation Stack and deploy the SAM resources.
+
 ```bash
 sam deploy \
     --template-file packaged.yaml \
-    --stack-name aws_sam_ocr \
+    --stack-name aws-sam-ocr \
     --capabilities CAPABILITY_IAM \
-    --parameter-overrides MyParameterSample=MySampleValue
+    --region your-region
 ```
 
-To see the names of the S3 bucket and DynamoDB table created after deployment, you can use the `aws cloudformation describe-stacks` command.
-```bash
-aws cloudformation describe-stacks \
-    --stack-name aws_sam_ocr --query 'Stacks[].Outputs'
-```
+## Resources:
+- https://github.com/aws-samples/cookiecutter-aws-sam-s3-rekognition-dynamodb-python
+- https://www.bilibili.com/video/BV1vJ411V7js
