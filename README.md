@@ -34,20 +34,18 @@ Here is a brief overview of the repo.
 * [Python 3.6 installed](https://www.python.org/downloads/)
 * [Docker installed](https://www.docker.com/community-edition)
 
-All of them are preinstalled on AWS Cloud9 and we will use it for demo.
-
 ### How to build (on Cloud9 environment)
 
 ```bash
-python3 -m venv ~/.ocrlambda
-pip3 install pip setuptools wheel pyyaml -U
-pip install boto3 botocore awscli aws-sam-cli -U
-sam init --location gh:aws-samples/cookiecutter-aws-sam-s3-rekognition-dynamodb-python
+python3 -m venv ~/.ocrlambda  ## create virtual environment
+pip3 install pip setuptools wheel pyyaml -U  ## update the pip version
+pip install boto3 botocore awscli aws-sam-cli -U  ## install python SDK, aws and sam command line tools
+sam init --location gh:aws-samples/cookiecutter-aws-sam-s3-rekognition-dynamodb-python  ## get the rekognition template
 ```
 
-After a few configurations the project structure is ready.
+After a few configurations for example your the project structure is ready. You can check it by the following.
 
-Next, run the following command to create a S3 bucket, package the Lambda function and upload it to the bucket.
+Next, `cd` into your directory, run the following command to create a S3 bucket, package the Lambda function and upload it to the bucket.
 
 ```bash
 touch requirements.txt
